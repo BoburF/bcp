@@ -32,8 +32,7 @@ func (s *Server) newServer(handler func(req Request, response Response)) {
                 Resource: requestProtocol.Resource,
                 Data: requestProtocol.Data,
             }
-
-            response := Response{}
+            response := Response{conn: conn}
 
             handler(request, response)
 
