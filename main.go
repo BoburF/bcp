@@ -34,7 +34,7 @@ func main() {
 		Data:      data,
 	}
 
-	err = request.ConverTo(1, &conn)
+	err = request.ConvertTo(1, &conn)
 	if err != nil {
 		log.Println("Error writing to connection:", err)
 		return
