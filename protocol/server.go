@@ -7,6 +7,6 @@ import (
 
 type FerxesServer struct{}
 
-func (fs *FerxesServer) newServer(port int) (net.Listener, error){
+func (fs *FerxesServer) NewServer(port int) (net.Listener, error){
   return net.Listen("tcp", fmt.Sprintf("localhost:%d", port))
 }
