@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"ferxes.uz/bcp/protocol"
+	wrapper_server "ferxes.uz/bcp/wrapper/server"
 )
 
 var wg sync.WaitGroup
@@ -48,6 +49,7 @@ func main() {
 		return
 	}
 	log.Println("response is from dialing:", response)
+
 	reader := bufio.NewReader(response.Data)
 	line, _, err := reader.ReadLine()
 	if err != nil {
@@ -58,15 +60,14 @@ func main() {
 }
 
 func server() {
-	server := protocol.FerxesServer{}
-	err := server.NewServer(2323, handler)
+	err := wrapper_server.NewServer(2323, handler)
 	if err != nil {
 		log.Println("creating server err:", err)
 	}
 	wg.Done()
 }
 
-func handler(req protocol.Request, res protocol.Response) {
+func handler(req wrapper_server.Request, res wrapper_server.Response) {
 	if req.Resource == "/" {
 		res.Additions["bobur"] = "abdullayev"
 		res.Data = strings.NewReader("Bobur zo'r bolasanda")

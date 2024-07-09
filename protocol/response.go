@@ -11,15 +11,15 @@ import (
 )
 
 type Response struct {
-	conn      *net.Conn
+	Conn      *net.Conn
 	Additions map[string]string
 	Data      io.Reader
 }
 
-func (rs *Response) ConvertTo(version int, conn *net.Conn) error {
+func (rs *Response) ConvertTo(version int) error {
 	switch version {
 	case 1:
-		return rs.v1ConvertTo(conn)
+		return rs.v1ConvertTo(rs.Conn)
 	default:
 		return errors.New("unsupported version")
 	}
