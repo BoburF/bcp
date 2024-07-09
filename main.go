@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"log"
 	"net"
 	"strings"
@@ -22,7 +23,7 @@ func main() {
 		return
 	}
 
-	resource := "example"
+	resource := "/"
 	additions := map[string]string{
 		"key1": "value1",
 		"key2": "value2",
@@ -46,46 +47,32 @@ func main() {
 		log.Println("Error from connection:", err)
 		return
 	}
-    log.Println("response is from dialing:", response)
+	log.Println("response is from dialing:", response)
+	reader := bufio.NewReader(response.Data)
+	line, _, err := reader.ReadLine()
+	if err != nil {
+		log.Println("Error from connection:", err)
+		return
+	}
+    log.Println(string(line))
 }
 
 func server() {
 	server := protocol.FerxesServer{}
-	listener, err := server.NewServer(2323)
+	err := server.NewServer(2323, handler)
 	if err != nil {
-		log.Println("Error creating server:", err)
-		return
+		log.Println("creating server err:", err)
 	}
-	defer listener.Close()
 	wg.Done()
+}
 
-	for {
-		conn, err := listener.Accept()
+func handler(req protocol.Request, res protocol.Response) {
+	if req.Resource == "/" {
+		res.Additions["bobur"] = "abdullayev"
+		res.Data = strings.NewReader("Bobur zo'r bolasanda")
+		err := res.Send()
 		if err != nil {
-			log.Println("Error accepting connections:", err)
-			return
-		}
-		defer conn.Close()
-		request := protocol.Request{}
-
-		err = request.ConvertFrom(&conn)
-		if err != nil {
-			log.Println(err)
-			return
-		}
-		log.Println(request)
-
-		additions := make(map[string]string)
-		additions["bobur"] = "abdullayev"
-		response := protocol.Response{
-			Additions: additions,
-			Data:      strings.NewReader("bobur zo'r bolada"),
-		}
-
-		err = response.ConvertTo(1, &conn)
-		if err != nil {
-			log.Println(err)
-			return
+			panic("Server can't write response")
 		}
 	}
 }

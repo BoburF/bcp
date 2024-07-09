@@ -11,6 +11,7 @@ import (
 )
 
 type Response struct {
+	conn      *net.Conn
 	Additions map[string]string
 	Data      io.Reader
 }
@@ -79,8 +80,8 @@ func (rs *Response) v1ConvertFrom(conn *net.Conn) error {
 	if err != nil {
 		return err
 	}
-	
-    rs.Additions = make(map[string]string)
+
+	rs.Additions = make(map[string]string)
 	for i := 0; i < additionsLength; i++ {
 		keyLength, err := utils.ReadInteger(&reader)
 		if err != nil {
@@ -103,7 +104,7 @@ func (rs *Response) v1ConvertFrom(conn *net.Conn) error {
 		}
 
 		valueBuff := make([]byte, valueLength)
-		_, err = reader.Read(valueBuff )
+		_, err = reader.Read(valueBuff)
 		if err != nil {
 			return err
 		}
@@ -112,10 +113,10 @@ func (rs *Response) v1ConvertFrom(conn *net.Conn) error {
 			return err
 		}
 
-        rs.Additions[string(keyBuff)] = string(valueBuff)
+		rs.Additions[string(keyBuff)] = string(valueBuff)
 	}
 
-    rs.Data = reader
+	rs.Data = reader
 
 	return nil
 }
