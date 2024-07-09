@@ -66,16 +66,16 @@ func server() {
 			return
 		}
 		defer conn.Close()
+        request := protocol.Request{}
 
-		buff := make([]byte, 1024)
-		_, err = conn.Read(buff)
-		if err != nil {
-			log.Println("Error reading from a connection:", err)
-			return
-		}
-		log.Println(string(buff))
+        err = request.ConvertFrom(&conn)
+        if err != nil {
+            log.Println(err)
+            return
+        }
+        log.Println(request)
 
-		log.Println("Readed str:", string(buff))
+        buff := []byte("Bobur zo'r bolasan")
 		_, err = conn.Write(buff)
 		if err != nil {
 			log.Println("Error writing to connection:", err)
