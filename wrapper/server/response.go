@@ -13,5 +13,7 @@ type Response struct {
 }
 
 func (rs *Response) Send() error {
+    rs.res.Additions = rs.Additions
+    rs.res.Data = rs.Data
 	return rs.res.ConvertTo(1)
 }

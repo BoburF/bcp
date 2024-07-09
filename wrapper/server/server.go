@@ -2,32 +2,28 @@ package wrapper_server
 
 import (
 	"fmt"
+	"log"
 	"net"
-	"sync"
 
 	"ferxes.uz/bcp/protocol"
 )
 
 func NewServer(port int, handler func(request Request, response Response)) error {
-	var wg sync.WaitGroup
 	listener, err := protocol.NewServer(port)
+    defer listener.Close()
 	if err != nil {
 		return err
 	}
-	wg.Add(1)
+    log.Println("Server started working on port:", port)
 
-	go func() {
-		defer wg.Done()
-		acceptConnections(&listener, handler)
-	}()
+	acceptConnections(listener, handler)
 
 	return nil
 }
 
-func acceptConnections(listener *net.Listener, handler func(request Request, response Response)) {
-	listen := *listener
+func acceptConnections(listener net.Listener, handler func(request Request, response Response)) {
 	for {
-		conn, err := listen.Accept()
+		conn, err := listener.Accept()
 		if err != nil {
 			fmt.Println("Error accepting connection:", err)
 			continue
@@ -44,13 +40,13 @@ func handleConnection(conn *net.Conn, handler func(request Request, response Res
 	request.ConvertFrom(conn)
 
 	response := protocol.Response{
-        Conn: conn,
+		Conn:      conn,
 		Additions: make(map[string]string),
 	}
 
-    req, res := handleTheHandler(request, response)
+	req, res := handleTheHandler(request, response)
 
-    handler(req, res)
+	handler(req, res)
 }
 
 func handleTheHandler(request protocol.Request, response protocol.Response) (Request, Response) {

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net"
 
 	"ferxes.uz/bcp/utils"
@@ -47,6 +48,7 @@ func (rs *Response) v1ConvertTo(conn *net.Conn) error {
 			return err
 		}
 	}
+    log.Println("Reqponse is written")
 
 	return nil
 }
