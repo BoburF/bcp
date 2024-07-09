@@ -40,13 +40,13 @@ func main() {
 		return
 	}
 
-	buff := make([]byte, 1024)
-	_, err = conn.Read(buff)
+	response := protocol.Response{}
+	err = response.ConvertFrom(&conn)
 	if err != nil {
-		log.Println("Error reading from a connection:", err)
+		log.Println("Error from connection:", err)
 		return
 	}
-	log.Println(string(buff))
+    log.Println("response is from dialing:", response)
 }
 
 func server() {
@@ -66,19 +66,25 @@ func server() {
 			return
 		}
 		defer conn.Close()
-        request := protocol.Request{}
+		request := protocol.Request{}
 
-        err = request.ConvertFrom(&conn)
-        if err != nil {
-            log.Println(err)
-            return
-        }
-        log.Println(request)
-
-        buff := []byte("Bobur zo'r bolasan")
-		_, err = conn.Write(buff)
+		err = request.ConvertFrom(&conn)
 		if err != nil {
-			log.Println("Error writing to connection:", err)
+			log.Println(err)
+			return
+		}
+		log.Println(request)
+
+		additions := make(map[string]string)
+		additions["bobur"] = "abdullayev"
+		response := protocol.Response{
+			Additions: additions,
+			Data:      strings.NewReader("bobur zo'r bolada"),
+		}
+
+		err = response.ConvertTo(1, &conn)
+		if err != nil {
+			log.Println(err)
 			return
 		}
 	}
