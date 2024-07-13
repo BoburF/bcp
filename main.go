@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"strings"
+	"os"
 
 	wrapper_server "ferxes.uz/bcp/wrapper/server"
 )
@@ -21,8 +21,14 @@ func server() {
 func handler(req wrapper_server.Request, res wrapper_server.Response) {
 	if req.Resource == "/" {
 		res.Additions["bobur"] = "abdullayev"
-		res.Data = strings.NewReader("Bobur zo'r bolasanda")
-		err := res.Send()
+
+		file, err := os.Open("sample.txt")
+		if err != nil {
+			panic("Server can't open file")
+		}
+
+		res.Data = file
+		err = res.Send()
 		if err != nil {
 			panic("Server can't write response")
 		}
