@@ -1,14 +1,45 @@
 package main
 
 import (
+	"fmt"
+	"io"
 	"log"
 	"os"
+	"time"
 
+	wrapper_dial "ferxes.uz/bcp/wrapper/dial"
 	wrapper_server "ferxes.uz/bcp/wrapper/server"
 )
 
 func main() {
-	server()
+	go server()
+	time.Sleep(2 * time.Second)
+
+	request := wrapper_dial.Request{
+		Resource:  "/",
+		Additions: make(map[string]string),
+		Data:      nil,
+	}
+	response, err := wrapper_dial.Dial("localhost", 2323, request)
+	if err != nil {
+		log.Println("Dial:", err)
+		return
+	}
+	defer response.Connection.Close()
+
+	file, err := os.Create(fmt.Sprintf("sample_received.%s", response.Additions["format"]))
+	if err != nil {
+		log.Println("Response:", err)
+		return
+	}
+
+	n, err := io.Copy(file, response.Data)
+	if err != nil {
+		log.Println("File:", err)
+		return
+	}
+
+	log.Println("this many bytes:", n)
 }
 
 func server() {

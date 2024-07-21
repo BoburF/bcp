@@ -10,11 +10,11 @@ import (
 
 func NewServer(port int, handler func(request Request, response Response)) error {
 	listener, err := protocol.NewServer(port)
-    defer listener.Close()
+	defer listener.Close()
 	if err != nil {
 		return err
 	}
-    log.Println("Server started working on port:", port)
+	log.Println("Server started working on port:", port)
 
 	acceptConnections(listener, handler)
 
