@@ -7,20 +7,20 @@ import (
 	"os"
 	"time"
 
-	wrapper_dial "ferxes.uz/bcp/wrapper/dial"
-	wrapper_server "ferxes.uz/bcp/wrapper/server"
+	bcp_client "ferxes.uz/bcp/bcp/client"
+	bcp "ferxes.uz/bcp/bcp/server"
 )
 
 func main() {
 	go server()
 	time.Sleep(2 * time.Second)
 
-	request := wrapper_dial.Request{
+	request := bcp_client.Request{
 		Resource:  "/",
 		Additions: make(map[string]string),
 		Data:      nil,
 	}
-	response, err := wrapper_dial.Dial("localhost", 2323, request)
+	response, err := bcp_client.Dial("localhost", 2323, request)
 	if err != nil {
 		log.Println("Dial:", err)
 		return
@@ -43,13 +43,13 @@ func main() {
 }
 
 func server() {
-	err := wrapper_server.NewServer(2323, handler)
+	err := bcp.NewServer(2323, handler)
 	if err != nil {
 		log.Println("creating server err:", err)
 	}
 }
 
-func handler(req wrapper_server.Request, res wrapper_server.Response) {
+func handler(req bcp.Request, res bcp.Response) {
 	if req.Resource == "/" {
 		res.Additions["bobur"] = "abdullayev"
 		res.Additions["format"] = "txt"

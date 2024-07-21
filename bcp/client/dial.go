@@ -1,4 +1,4 @@
-package wrapper_dial
+package bcp_client
 
 import (
 	"fmt"
