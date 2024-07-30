@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	bcp_client "ferxes.uz/bcp/bcp/client"
-	bcp "ferxes.uz/bcp/bcp/server"
+	bcp_client "github.com/BoburF/bcp/bcp/client"
+	bcp "github.com/BoburF/bcp/bcp/server"
 )
 
 func main() {

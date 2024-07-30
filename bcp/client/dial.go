@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	"ferxes.uz/bcp/protocol"
+	"github.com/BoburF/bcp/protocol"
 )
 
 func Dial(host string, port int, request Request) (Response, error) {

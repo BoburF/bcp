@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	"ferxes.uz/bcp/protocol"
+	"github.com/BoburF/bcp/protocol"
 )
 
 func NewServer(port int, handler func(request Request, response Response)) error {

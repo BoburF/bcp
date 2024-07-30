@@ -8,7 +8,7 @@ import (
 	"log"
 	"net"
 
-	"ferxes.uz/bcp/utils"
+	"github.com/BoburF/bcp/utils"
 )
 
 type Response struct {

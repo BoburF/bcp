@@ -7,7 +7,7 @@ import (
 	"io"
 	"net"
 
-	"ferxes.uz/bcp/utils"
+	"github.com/BoburF/bcp/utils"
 )
 
 type Request struct {

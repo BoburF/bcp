@@ -3,7 +3,7 @@ package bcp
 import (
 	"io"
 
-	"ferxes.uz/bcp/protocol"
+	"github.com/BoburF/bcp/protocol"
 )
 
 type Response struct {
