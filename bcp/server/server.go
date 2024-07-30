@@ -8,8 +8,8 @@ import (
 	"github.com/BoburF/bcp/protocol"
 )
 
-func NewServer(port int, handler func(request Request, response Response)) error {
-	listener, err := protocol.NewServer(port)
+func NewServer(host string, port int, handler func(request Request, response Response)) error {
+	listener, err := protocol.NewServer(host, port)
 	defer listener.Close()
 	if err != nil {
 		return err

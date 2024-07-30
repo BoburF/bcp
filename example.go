@@ -43,7 +43,7 @@ func main() {
 }
 
 func server() {
-	err := bcp.NewServer(2323, handler)
+	err := bcp.NewServer("localhost", 2323, handler)
 	if err != nil {
 		log.Println("creating server err:", err)
 	}
